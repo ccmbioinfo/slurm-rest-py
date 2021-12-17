@@ -1,0 +1,60 @@
+name: Test Python package
+on:
+  push:
+    branches:
+      - master
+jobs:
+  requirements:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - 3.6
+          - 3.7
+          - 3.8
+          - 3.9
+          - 3.10
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -c 'import slurm_rest'
+  pip:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - 3.6
+          - 3.7
+          - 3.8
+          - 3.9
+          - 3.10
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: pip install -e .
+      - run: python -c 'import slurm_rest'
+  setuptools:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - 3.6
+          - 3.7
+          - 3.8
+          - 3.9
+          - 3.10
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: python setup.py install --user
+      - run: python -c 'import slurm_rest'

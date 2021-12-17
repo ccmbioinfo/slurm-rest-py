@@ -22,9 +22,13 @@
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
 
-# Manual addition
+# Manual additions
 .editorconfig
+.github/
 
+# Irrelevant CI systems
+.gitlab-ci.yml
+.travis.yml
 # Useless script
 git_push.sh
 
