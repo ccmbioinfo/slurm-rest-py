@@ -18,9 +18,9 @@ Python >= 3.6
 If the python package is hosted on a repository, you can install directly using:
 
 ```sh
-pip install git+https://github.com/GIT_USER_ID/GIT_REPO_ID.git
+pip install git+https://github.com/ccmbioinfo/slurm-rest-py.git
 ```
-(you may need to run `pip` with root permission: `sudo pip install git+https://github.com/GIT_USER_ID/GIT_REPO_ID.git`)
+(you may need to run `pip` with root permission to install globally: `sudo pip install git+https://github.com/ccmbioinfo/slurm-rest-py.git`)
 
 Then import the package:
 ```python
@@ -46,13 +46,12 @@ import slurm_rest
 Please follow the [installation procedure](#installation--usage) and then run the following:
 
 ```python
+#!/usr/bin/env python3
 
-import time
-import slurm_rest
-from pprint import pprint
-from slurm_rest.api import default_api
-from slurm_rest.model.job_properties import JobProperties
-from slurm_rest.model.signal import Signal
+from slurm_rest import Configuration, ApiClient, ApiException
+from slurm_rest.apis import SlurmApi
+
+
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = slurm_rest.Configuration(
@@ -78,20 +77,18 @@ configuration.api_key['user'] = 'YOUR_API_KEY'
 
 
 # Enter a context with an instance of the API client
-with slurm_rest.ApiClient(configuration) as api_client:
+with ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = default_api.DefaultApi(api_client)
+    api_instance = SlurmApi(api_client)
     
     try:
         # get diagnostics
-        api_instance.slurm_v0035_diag_get()
+        print(api_instance.slurmctld_diag())
     except slurm_rest.ApiException as e:
-        print("Exception when calling DefaultApi->slurm_v0035_diag_get: %s\n" % e)
+        print("Exception when calling SlurmApi->slurmctld_diag: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
-
-All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -434,3 +431,28 @@ from slurm_rest.apis import *
 from slurm_rest.models import *
 ```
 
+## Generating and updating documentation
+
+Download Slurm's OpenAPI schema at `/openapi.json` (all forms of this endpoint
+return the exact same document) to `openapi-slurm.json`, then run the generator:
+
+```bash
+docker run --rm \
+    --user $(id -u):$(id -g) \
+    -v $PWD:/srv \
+    openapitools/openapi-generator-cli:v5.3.0 \
+    generate \
+    -i /srv/openapi-slurm.json \
+    -g python \
+    --skip-validate-spec \
+    -o /srv/SUBDIRECTORY_OF_PWD_IF_NEEDED \
+    --package-name slurm_rest
+```
+
+I used Docker to run the CLI for convenience, but it can be run in other ways.
+The Slurm schema has some validation errors with repeated attributes, so we have
+to skip that step to generate the client, which seems to work regardless. We use
+a bind mount for the container to write local files, and additionally use our
+current UID and GID with the container so the files aren't written out as root.
+This can be run in the repository root or its parent directory, as long as the
+`-o` output path is adjusted accordingly.

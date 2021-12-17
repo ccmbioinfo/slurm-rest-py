@@ -1,5 +1,4 @@
 .gitignore
-README.md
 docs/Dbv0036Account.md
 docs/Dbv0036AccountInfo.md
 docs/Dbv0036AccountResponse.md

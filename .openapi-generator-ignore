@@ -36,3 +36,6 @@ git_push.sh
 test/
 test-requirements.txt
 tox.ini
+
+# Manual modifications made
+README.md
