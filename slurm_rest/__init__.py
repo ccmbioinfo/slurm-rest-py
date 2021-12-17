@@ -11,7 +11,7 @@
 """
 
 
-__version__ = "1.0.0"
+__version__ = "0.0.37.0"
 
 # import ApiClient
 from slurm_rest.api_client import ApiClient

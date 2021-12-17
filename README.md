@@ -446,7 +446,10 @@ docker run --rm \
     -g python \
     --skip-validate-spec \
     -o /srv/SUBDIRECTORY_OF_PWD_IF_NEEDED \
-    --package-name slurm_rest
+    --package-name slurm_rest \
+    --git-user-id ccmbioinfo \
+    --git-repo-id slurm-rest-py \
+    --additional-properties packageVersion=0.0.37.0
 ```
 
 I used Docker to run the CLI for convenience, but it can be run in other ways.
