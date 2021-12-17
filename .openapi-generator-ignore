@@ -21,3 +21,14 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
+
+# Manual addition
+.editorconfig
+
+# Useless script
+git_push.sh
+
+# Generated tests by the Python generator are all stubs
+test/
+test-requirements.txt
+tox.ini
