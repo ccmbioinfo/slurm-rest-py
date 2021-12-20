@@ -12,7 +12,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "slurm-rest"
-VERSION = "0.0.37.0"
+VERSION = "0.0.37.1"
 # To install the library, run the following
 #
 # python setup.py install
